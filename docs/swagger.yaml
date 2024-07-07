@@ -1,0 +1,330 @@
+basePath: /api
+definitions:
+  handler.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handler.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.TaskRequestBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - name
+    - user_id
+    type: object
+  model.TaskTimeSpent:
+    properties:
+      taskID:
+        type: integer
+      totalMinutes:
+        type: number
+    type: object
+  model.User:
+    properties:
+      address:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      passportNumber:
+        type: integer
+      passportSerie:
+        type: integer
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  model.UserRequestBody:
+    properties:
+      passportNumber:
+        type: string
+    type: object
+  model.UserUpdateRequestBody:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the API for the Time Tracker application.
+  title: time-tracker API
+  version: "1.0"
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.TaskRequestBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Task ID
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create a new task
+      tags:
+      - Tasks
+  /task/{task_id}/start:
+    post:
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status of the task
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Start a task
+      tags:
+      - Tasks
+  /task/{task_id}/stop:
+    post:
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status of the task
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Stop a task
+      tags:
+      - Tasks
+  /user:
+    get:
+      parameters:
+      - in: query
+        name: address
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - default: 1
+        in: query
+        name: page
+        type: integer
+      - in: query
+        name: passport_number
+        type: integer
+      - in: query
+        name: passport_serie
+        type: integer
+      - in: query
+        name: patronymic
+        type: string
+      - default: 10
+        in: query
+        name: per_page
+        type: integer
+      - in: query
+        name: surname
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequestBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User ID
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create a user
+      tags:
+      - Users
+  /user/{user_id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Message
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Delete a user
+      tags:
+      - Users
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: User details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserUpdateRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Update a user
+      tags:
+      - Users
+  /user/{user_id}/time-spent:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Start period
+        example: '"2023-30-12 00:00:00"'
+        in: query
+        name: start_period
+        required: true
+        type: string
+      - description: End period
+        example: '"2023-30-12 23:59:59"'
+        in: query
+        name: end_period
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of time spent
+          schema:
+            items:
+              $ref: '#/definitions/model.TaskTimeSpent'
+            type: array
+        "400":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Error message
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get user time spent
+      tags:
+      - Users
+swagger: "2.0"
