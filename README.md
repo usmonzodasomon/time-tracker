@@ -23,6 +23,9 @@ POSTGRES_DATABASE=database
 EXTERNAL_API_URL=https://api.passportdata.com
 ```
 
+`Note: Используются замоканные данные для внешнего API`
+
+`Примеры данных для пользователя вы можете найти в файле /internal/external_api/mocks/UserExternalInfo`
 ## Запуск
 
 Для запуска приложения используйте следующую команду:
